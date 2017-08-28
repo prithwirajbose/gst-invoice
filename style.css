@@ -1,0 +1,47 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    background: #efefef;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+input,
+button,
+textarea,
+select {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    line-height: 20px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    padding: 2px 5px;
+}
+
+.container {
+    width: 900px;
+    margin: 0px auto;
+}
+
+.main {
+    width: 100%;
+    margin: 10px auto;
+    background: #fff;
+    padding: 10px;
+}
+
+.loginbox {
+    width: 290px;
+    margin: 100px auto;
+    text-align: center;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.centerheading {
+    text-align: center;
+    margin: 30px;
+}
