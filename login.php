@@ -31,7 +31,7 @@
                     data:$('form[name=loginform]').serialize(),
                     method:'post',
                     success: function(resp) {
-                        if(resp && resp.success && resp.success===true && resp.data.redir) {
+                        if(resp && resp.success && resp.success===true && resp.data && resp.data.redir) {
                             window.location = resp.data.redir;
                         }  else {
                             APP.showError("Login failed." +
