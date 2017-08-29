@@ -14,6 +14,25 @@ $(document).ready(function() {
     $(document).ajaxStop(function() {
         $.loader('close');
     });
+
+    $('.logout').click(function(e) {
+        $.ajax({
+            url: "ajax.php?action=logout",
+            method: 'get',
+            success: function(resp) {
+                if (resp && resp.success && resp.success === true) {
+                    window.location = 'login.php';
+                } else {
+                    APP.showError("Logout failed. An error has occured." +
+                        (resp.message && resp.message ? '<br>' + resp.message : ''));
+                }
+            },
+            error: function(xhr) {
+                APP.showError("Logout failed. An error has occured." +
+                    (xhr.responseJSON && xhr.responseJSON.message ? '<br>' + xhr.responseJSON.message : ''));
+            }
+        });
+    });
 });
 
 APP.showInfo = function(message, title) {

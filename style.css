@@ -7,6 +7,19 @@ body {
     box-sizing: border-box;
 }
 
+a:link,
+a:visited {
+    color: #0078ff;
+    text-decoration: none;
+    transition: .5s text-shadow;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #0060cb;
+    text-shadow: 1px 1px 1px #ddd;
+}
+
 input,
 button,
 textarea,
@@ -41,7 +54,7 @@ button:hover {
 }
 
 .container {
-    width: 900px;
+    width: 90%;
     margin: 0px auto;
 }
 
@@ -62,6 +75,11 @@ button:hover {
     padding: 10px;
 }
 
+.loginbox input[type=text],
+.loginbox input[type=password] {
+    width: 182px;
+}
+
 .centerheading {
     text-align: center;
     margin: 30px;
@@ -78,6 +96,77 @@ button:hover {
     line-height: 24px;
 }
 
+.ui-widget-overlay {
+    opacity: .80 !important;
+    /* Make sure to change both of these, as IE only sees the second one */
+    filter: Alpha(Opacity=80) !important;
+    background-color: rgb(50, 50, 50) !important;
+    /* This will make it darker */
+}
+
 .error {
     color: red;
+}
+
+nav {
+    background: #333;
+    padding: 2px 20px;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    list-style-type: none;
+}
+
+nav>ul>li>a {
+    color: #bfddff !important;
+    display: block;
+    line-height: 2em;
+    padding: 2px 20px;
+    margin: 0px;
+    text-decoration: none;
+    transition: .5s color;
+    text-decoration: none;
+}
+
+nav>ul>li>a:hover {
+    background: url(images/menu-item-bg.png) bottom repeat-x;
+    border-radius: 5px;
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.logo {
+    margin: 5px;
+    padding: 0px;
+    float: left;
+    width: 50%;
+}
+
+.logo img {
+    border: none;
+    width: 250px;
+    height: auto;
+}
+
+.toolbox {
+    float: right;
+    width: 30%;
+    text-align: right;
+    margin: 5px 10px;
+    padding: 0;
+}
+
+.clear {
+    clear: both;
+    padding: 0;
+    margin: 0;
+    line-height: 1px;
+    font-size: 1px;
+    height: 1px;
 }
