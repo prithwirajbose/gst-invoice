@@ -1,0 +1,49 @@
+{
+    "name": "loader",
+    "version": "2.1.1",
+    "title": "jQuery Loader Plugin",
+    "author": {
+        "name": "Rémi Goyard",
+        "url": "http://www.mimiz.fr/"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://raw.github.com/mimiz/jquery-loader-plugin/master/MIT-LICENSE.txt"
+        },
+        {
+            "type": "GPLv2",
+            "url": "https://raw.github.com/mimiz/jquery-loader-plugin/master/GPL-LICENSE.txt"
+        }
+    ],
+    "dependencies": {
+        "jquery": "1.2.2"
+    },
+    "description": "This little jQuery plugin is used to add a loading popup.\n This could be usefull for ajax calls, and it’s really simple to use !.",
+    "keywords": [
+        "loader",
+        "loading",
+        "popup",
+        "waiter",
+        "ajax",
+        "waiting"
+    ],
+    "homepage": "http://www.mimiz.fr/javascript/jquery/jquery-loader-plugin-2/?lang=en",
+    "docs": "http://www.mimiz.fr/javascript/jquery/jquery-loader-plugin-2/?lang=en",
+    "demo": "http://demos.mimiz.fr/jquery/loader",
+    "maintainers": [
+        {
+            "name": "Rémi Goyard",
+            "url": "https://github.com/mimiz/jquery-loader-plugin"
+        }
+    ],
+    "files": [
+        "jquery.loader.js",
+        "jquery.loader.css",
+        "jquery.loader.demo.html",
+        "sampledatas.json",
+        "images",
+        "min",
+        "tests"
+    ]
+}

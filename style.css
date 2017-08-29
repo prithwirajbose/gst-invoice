@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif !important;
     font-size: 1em;
     background: #efefef;
     margin: 0px;
@@ -17,6 +17,27 @@ select {
     border: 1px solid #999;
     border-radius: 2px;
     padding: 2px 5px;
+}
+
+input[type=submit],
+input[type=button],
+button {
+    border-radius: 3px;
+    background: #fefefe url(images/button-bg.png) bottom repeat-x;
+    color: #0055ff;
+    padding: 4px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
+
+input[type=submit]:hover,
+input[type=button]:hover,
+button:hover {
+    color: #fff;
+    font-weight: normal;
+    background: #0055ff url(images/button-hover.png) bottom repeat-x;
 }
 
 .container {
@@ -44,4 +65,19 @@ select {
 .centerheading {
     text-align: center;
     margin: 30px;
+}
+
+.ajaxloader {
+    border: none !important;
+    background: transparent;
+    background-color: transparent !important;
+}
+
+.dialog .bd {
+    text-align: center;
+    line-height: 24px;
+}
+
+.error {
+    color: red;
 }
