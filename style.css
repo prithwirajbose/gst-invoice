@@ -60,9 +60,27 @@ button:hover {
 
 .main {
     width: 100%;
-    margin: 10px auto;
+    margin: 0px auto;
     background: #fff;
     padding: 10px;
+}
+
+.content {
+    width: 100%;
+    padding: 15px 10px;
+    margin: 0;
+    min-height: 400px;
+}
+
+.footer {
+    width: 100%;
+    margin: 0px;
+    padding: 20px 10px;
+    text-align: center;
+    background: #999;
+    color: #fff;
+    font-size: 0.8em;
+    min-height: 40px;
 }
 
 .loginbox {
@@ -142,7 +160,7 @@ nav>ul>li>a:hover {
 }
 
 .logo {
-    margin: 5px;
+    margin: 0px 5px 5px 5px;
     padding: 0px;
     float: left;
     width: 50%;
@@ -169,4 +187,54 @@ nav>ul>li>a:hover {
     line-height: 1px;
     font-size: 1px;
     height: 1px;
+}
+
+.threecol {
+    float: left;
+    width: 32%;
+    padding: 5px;
+    margin: 6px;
+}
+
+.twocol {
+    float: left;
+    width: 47%;
+    padding: 5px;
+    margin: 6px;
+}
+
+.onecol {
+    float: left;
+    width: 96%;
+    padding: 5px;
+    margin: 6px;
+}
+
+.widgetbox {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.8em !important;
+}
+
+.sectionheading {
+    font-size: 1.3em;
+    font-weight: normal;
+    color: #0060ab;
+    margin: 2px 2px 10px 2px;
+    padding: 5px;
+    line-height: 1.4em;
+    font-weight: bold;
+    background: #eee;
+}
+
+.datagrid {
+    table-layout: fixed !important;
+}
+
+.datagrid td {
+    word-wrap: break-word !important;
+}
+
+.DataTables_sort_wrapper {
+    vertical-align: bottom !important;
 }

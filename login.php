@@ -27,21 +27,20 @@
     var doLogin = function() {
        
         $.ajax({
-                    url: "ajax.php",
+                    url: APP.site + "/ajax.php",
                     data:$('form[name=loginform]').serialize(),
                     method:'post',
                     success: function(resp) {
-                        if(resp && resp.success && resp.success===true && resp.data && resp.data.redir) {
-                            window.location = resp.data.redir;
+                        if(resp && resp.success && resp.success===true) {
+                            if(resp.data && resp.data.redir && resp.data.redir!=null && resp.data.redir!='')
+                                window.location = decodeURIComponent(resp.data.redir);
+                            else
+                                window.location = APP.site + '/index.php';
                         }  else {
                             APP.showError("Login failed." +
                                 (resp.message && resp.message ? '<br>' + resp.message : ''));
                         }
                         
-                    },
-                    error: function(xhr) {
-                        APP.showError("Login failed. An error has occured."
-                            + (xhr.responseJSON && xhr.responseJSON.message ? '<br>' + xhr.responseJSON.message : ''));
                     }
                 });
     };

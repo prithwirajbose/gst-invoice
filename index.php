@@ -1,3 +1,9 @@
+<?php
+if(!isset($_SESSION)) {
+    session_start();
+}
+include_once('includes/membervalidation.php')
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,45 +12,85 @@
     </head>
     <body>
     <div class="container">
-        <nav class="main">
-        <div class="logo"><img src="images/logo.png" /></div>
-        <div class="toolbox">Welcome <b>User</b><br /><a href="#" class="logout">Logout</a></div>
-        <div class="clear">&nbsp;</div>
-        <nav>
-        <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="index2.php">Configuration</a></li>
-        <li><a href="index2.php">Profile</a></li>
-        </ul>
-        </nav>
+        <div class="main">
+            <?php include('includes/pageheading.php'); ?>
+            <div class="content">
+                <div class="twocol widgetbox">
+                    <h1 class="sectionheading">User List</h1>
+                    <table id="userGrid" class="display datagrid" cellspacing="0">
+                    </table>
+                </div>
+                <div class="twocol widgetbox">
+                    <h1 class="sectionheading">User List</h1>
+                    
+                </div>
+                <div class="onecol widgetbox">
+                    <h1 class="sectionheading">User List</h1>
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
         </div>
+        
+            <?php include('includes/footer.php'); ?>
     </div>
     <script type="text/javascript">
-    var doLogin = function() {
-       
-        $.ajax({
-                    url: "ajax.php",
-                    data:$('form[name=loginform]').serialize(),
-                    method:'post',
-                    success: function(resp) {
-                        APP.showInfo("Success");
-                    },
-                    error: function(xhr) {
-                        APP.showError("Login failed. An error has occured."
-                            + (xhr.responseJSON && xhr.responseJSON.message ? '<br>' + xhr.responseJSON.message : ''));
-                        console.log(xhr);
-                    }
-                });
-    };
+    
     $(document).ready(function(){
-        $('#loginsubmit').click(function(e) {
-            doLogin();
+        var userTable = $('#userGrid').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": APP.site + "/ajax.php?action=userList",
+            "aoColumns" : [
+                {
+                "sTitle" : "Name",
+                "sWidth" : "25%",
+                "mDataProp" : "full_name",
+                "sType" : "string"
+                }, {
+                "sTitle" : "Email ID",
+                "sWidth" : "31%",
+                "mDataProp" : "email_id",
+                "sType" : "string"
+                }, {
+                "sTitle" : "Username",
+                "sWidth" : "20%",
+                "mDataProp" : "username",
+                "sType" : "string"
+                }, { 
+                "sTitle" : "Status",
+                "sWidth" : "12%",
+                "mDataProp" : "active_in",
+                "sType" : "string",
+                "render": function ( data, type, row ) {
+                    return data == 1 ? 'Active' : 'Inactive';
+                }
+                }, {
+                "sTitle" : "Access Level",
+                "sWidth" : "12%",
+                "mDataProp" : "access_level",
+                "sType" : "string",
+                "render": function ( data, type, row ) {
+                    var accessLevel = {
+                        "1" : "Admin",
+                        "2" : "End User"
+                    }
+                    return accessLevel[data];
+                }
+                } 
+            ]
         });
-        $('#username, #password').keypress(function(e) {
-            if(e.which===13) {
-                doLogin();
-            }
+        
+        /*$('#userGrid1').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": APP.site + "/ajax.php?action=userList"
         });
+        $('#userGrid2').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ajax": APP.site + "/ajax.php?action=userList"
+        });*/
     });
     </script>
     <?php include('includes/uielements.php'); ?>

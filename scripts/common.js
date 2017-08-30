@@ -15,9 +15,14 @@ $(document).ready(function() {
         $.loader('close');
     });
 
+    $(document).ajaxError(function(e, xhr) {
+        APP.showError("An error has occured." +
+            (xhr.responseJSON && xhr.responseJSON.message ? '<br>' + xhr.responseJSON.message : ''));
+    });
+
     $('.logout').click(function(e) {
         $.ajax({
-            url: "ajax.php?action=logout",
+            url: APP.site + "/ajax.php?action=logout",
             method: 'get',
             success: function(resp) {
                 if (resp && resp.success && resp.success === true) {
@@ -26,10 +31,6 @@ $(document).ready(function() {
                     APP.showError("Logout failed. An error has occured." +
                         (resp.message && resp.message ? '<br>' + resp.message : ''));
                 }
-            },
-            error: function(xhr) {
-                APP.showError("Logout failed. An error has occured." +
-                    (xhr.responseJSON && xhr.responseJSON.message ? '<br>' + xhr.responseJSON.message : ''));
             }
         });
     });
