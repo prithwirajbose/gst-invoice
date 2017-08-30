@@ -2,13 +2,16 @@
 if(!isset($_SESSION)) {
     session_start();
 }
-include_once('includes/membervalidation.php')
+include_once('includes/membervalidation.php');
+include_once('config.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>GST Invoice</title>
         <?php include('includes/head.php'); ?>
+        <script type="text/javascript" src="<?php echo $config['site']; ?>/scripts/user.js"></script>
+        <script type="text/javascript" src="<?php echo $config['site']; ?>/scripts/product.js"></script>
     </head>
     <body>
     <div class="container">
@@ -16,13 +19,14 @@ include_once('includes/membervalidation.php')
             <?php include('includes/pageheading.php'); ?>
             <div class="content">
                 <div class="twocol widgetbox">
-                    <h1 class="sectionheading">User List</h1>
-                    <table id="userGrid" class="display datagrid" cellspacing="0">
+                    <h1 class="sectionheading">Users</h1>
+                    <table id="userGrid" class="display datagrid" cellspacing="0" style="width:100%">
                     </table>
                 </div>
                 <div class="twocol widgetbox">
-                    <h1 class="sectionheading">User List</h1>
-                    
+                    <h1 class="sectionheading">Products</h1>
+                    <table id="productGrid" class="display datagrid" cellspacing="0" style="width:100%">
+                    </table>
                 </div>
                 <div class="onecol widgetbox">
                     <h1 class="sectionheading">User List</h1>
@@ -37,60 +41,12 @@ include_once('includes/membervalidation.php')
     <script type="text/javascript">
     
     $(document).ready(function(){
-        var userTable = $('#userGrid').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "ajax": APP.site + "/ajax.php?action=userList",
-            "aoColumns" : [
-                {
-                "sTitle" : "Name",
-                "sWidth" : "25%",
-                "mDataProp" : "full_name",
-                "sType" : "string"
-                }, {
-                "sTitle" : "Email ID",
-                "sWidth" : "31%",
-                "mDataProp" : "email_id",
-                "sType" : "string"
-                }, {
-                "sTitle" : "Username",
-                "sWidth" : "20%",
-                "mDataProp" : "username",
-                "sType" : "string"
-                }, { 
-                "sTitle" : "Status",
-                "sWidth" : "12%",
-                "mDataProp" : "active_in",
-                "sType" : "string",
-                "render": function ( data, type, row ) {
-                    return data == 1 ? 'Active' : 'Inactive';
-                }
-                }, {
-                "sTitle" : "Access Level",
-                "sWidth" : "12%",
-                "mDataProp" : "access_level",
-                "sType" : "string",
-                "render": function ( data, type, row ) {
-                    var accessLevel = {
-                        "1" : "Admin",
-                        "2" : "End User"
-                    }
-                    return accessLevel[data];
-                }
-                } 
-            ]
-        });
-        
-        /*$('#userGrid1').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "ajax": APP.site + "/ajax.php?action=userList"
-        });
-        $('#userGrid2').DataTable( {
-            "processing": true,
-            "serverSide": true,
-            "ajax": APP.site + "/ajax.php?action=userList"
-        });*/
+        if($('#userGrid').length>0) {
+            renderUserListGrid($('#userGrid'));
+        }
+        if($('#productGrid').length>0) {
+            renderProductListGrid($('#productGrid'));
+        }
     });
     </script>
     <?php include('includes/uielements.php'); ?>

@@ -25,13 +25,17 @@
     </div>
     <script type="text/javascript">
     var doLogin = function() {
-       
+       if($.trim($('#username').val())=='' || $.trim($('#password').val())=='') {
+           APP.showInfo("Please enter username and password.");
+           return false;
+       }
         $.ajax({
                     url: APP.site + "/ajax.php",
                     data:$('form[name=loginform]').serialize(),
                     method:'post',
                     success: function(resp) {
                         if(resp && resp.success && resp.success===true) {
+                            APP.redirecting();
                             if(resp.data && resp.data.redir && resp.data.redir!=null && resp.data.redir!='')
                                 window.location = decodeURIComponent(resp.data.redir);
                             else
@@ -48,11 +52,12 @@
         $('#loginsubmit').click(function(e) {
             doLogin();
         });
-        $('#username, #password').keypress(function(e) {
+        $('#username, #password').keyup(function(e) {
             if(e.which===13) {
                 doLogin();
             }
         });
+        $('#username').focus();
     });
     </script>
     <?php include('includes/uielements.php'); ?>

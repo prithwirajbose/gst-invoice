@@ -5,6 +5,7 @@
 <script type="text/javascript">
 var APP = {};
 APP.site="<?php echo $config['site']; ?>";
+APP.currency="<?php echo !empty($_SESSION['currency']) ? $_SESSION['currency'] : 'INR'; ?>";
 </script>
 <script src="<?php echo $config['site']; ?>/scripts/jquery-3.2.1.min.js" type="text/javascript"></script>
 <script src="<?php echo $config['site']; ?>/scripts/jquery.loader/jquery.loader.js" type="text/javascript"></script>
