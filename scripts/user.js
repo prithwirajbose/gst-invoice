@@ -3,7 +3,7 @@ function renderUserListGrid(el) {
         var userTable = $(el).DataTable({
             "processing": true,
             "serverSide": true,
-            "scrollY": "400px",
+            "scrollY": "300px",
             "scrollCollapse": true,
             "ajax": APP.site + "/ajax.php?action=userList",
             "aoColumns": [{
@@ -14,7 +14,7 @@ function renderUserListGrid(el) {
                 "sortable": false,
                 "searchable": false,
                 "render": function(data, type, row) {
-                    return '<input type="checkbox" class="gridCheck_user" id="selectUser_' + data + '" value="' + data + '" />';
+                    return '<input type="checkbox" class="gridCheck_user gridCheck" id="selectUser_' + data + '" value="' + data + '" />';
                 }
             }, {
                 "sTitle": "Name",

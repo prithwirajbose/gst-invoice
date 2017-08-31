@@ -3,7 +3,7 @@ function renderProductListGrid(el) {
         var productTable = $(el).DataTable({
             "processing": true,
             "serverSide": true,
-            "scrollY": "400px",
+            "scrollY": "300px",
             "scrollCollapse": true,
             "ajax": APP.site + "/ajax.php?action=productList",
             "aoColumns": [{
