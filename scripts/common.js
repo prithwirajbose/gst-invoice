@@ -43,8 +43,11 @@ APP.redirecting = function() {
         'text-align:center;border-radius:0px 0px 5px 5px;">Please wait, Redirecting...</div>');
 };
 
-APP.openUrlInPopup = function(pageUrl, title, dimension) {
+function alert(msg) {
+    APP.showInfo(msg);
+}
 
+APP.openUrlInPopup = function(pageUrl, title, dimension) {
     $.ajax({
         url: APP.site + pageUrl,
         method: 'get',

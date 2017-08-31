@@ -20,7 +20,11 @@ a:hover {
     text-shadow: 1px 1px 1px #ddd;
 }
 
-input,
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=button],
+input[type=submit],
 button,
 textarea,
 select {
@@ -30,6 +34,15 @@ select {
     border: 1px solid #999;
     border-radius: 2px;
     padding: 2px 5px;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    line-height: 20px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    height: 18px;
+    width: 18px;
 }
 
 input[type=submit],
@@ -43,6 +56,22 @@ button {
     cursor: pointer;
     font-weight: normal;
     letter-spacing: 1px;
+    margin: 2px 4px;
+}
+
+input[type=submit].smallbtn,
+input[type=button].smallbtn,
+button.smallbtn {
+    border-radius: 3px;
+    background: #fefefe url(images/button-bg.png) bottom repeat-x;
+    color: #0055ff;
+    padding: 2px 10px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: normal;
+    letter-spacing: 0px;
+    line-height: 18px;
+    margin: 0px 4px;
 }
 
 input[type=submit]:hover,
@@ -238,4 +267,18 @@ nav>ul>li>a:hover {
 
 .DataTables_sort_wrapper {
     vertical-align: bottom !important;
+}
+
+.fullwidth {
+    width: 98%;
+}
+
+input.fullwidth,
+button.fullwidth {
+    width: 97%;
+}
+
+select.fullwidth,
+textarea.fullwidth {
+    width: 100%;
 }

@@ -3,6 +3,6 @@
   <div class="bd"></div>
 </div>
 <div id="viewerPopup" class="dialog" title="Details">
-  <div class="bd"></div>
+  <div class="bd" style="overflow-y:auto;"></div>
 </div>
 </div>

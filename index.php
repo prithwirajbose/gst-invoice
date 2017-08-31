@@ -18,12 +18,12 @@ include_once('config.php');
         <div class="main">
             <?php include('includes/pageheading.php'); ?>
             <div class="content">
-                <div class="twocol widgetbox">
+                <div class="twocol widgetbox userGridContainer">
                     <h1 class="sectionheading">Users</h1>
                     <table id="userGrid" class="display datagrid" cellspacing="0" style="width:100%">
                     </table>
                 </div>
-                <div class="twocol widgetbox">
+                <div class="twocol widgetbox productGridContainer">
                     <h1 class="sectionheading">Products</h1>
                     <table id="productGrid" class="display datagrid" cellspacing="0" style="width:100%">
                     </table>

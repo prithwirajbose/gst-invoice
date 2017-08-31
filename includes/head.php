@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript">
 var APP = {};
+APP.grids = {};
 APP.site="<?php echo $config['site']; ?>";
 APP.currency="<?php echo !empty($_SESSION['currency']) ? $_SESSION['currency'] : 'INR'; ?>";
 </script>
@@ -19,6 +20,6 @@ APP.currency="<?php echo !empty($_SESSION['currency']) ? $_SESSION['currency'] :
 <link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.ui/jquery-ui.min.css">
 <link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.ui/jquery-ui.theme.min.css">
 <link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.datatables/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.datatables/css/dataTables.jquery.min.css">
+<link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.datatables/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.datatables/css/dataTables.jqueryui.min.css">
 <link href="<?php echo $config['site']; ?>/style.css" rel="stylesheet">

@@ -13,7 +13,7 @@ function renderProductListGrid(el) {
                     "sType": "string"
                 }, {
                     "sTitle": "Name",
-                    "sWidth": "35%",
+                    "sWidth": "34%",
                     "mDataProp": "prod_name",
                     "sType": "string"
                 }, {
@@ -51,5 +51,6 @@ function renderProductListGrid(el) {
                 }
             ]
         });
+        APP.grids.productTable = productTable;
     }
 }

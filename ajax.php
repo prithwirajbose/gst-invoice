@@ -1,5 +1,5 @@
 <?php
-require_once('db.php');
+include_once('config.php');
 if(!isset($_SESSION)) {
     session_start();
 }
@@ -55,6 +55,33 @@ function fn_logout() {
     unset($_SESSION);
     session_unset();
     return array("status"=>200);
+}
+
+function fn_addUser() {
+    return array("status"=>200);
+}
+
+function fn_updateUser() {
+    $authStatus = authCheck(1);
+    if($authStatus!==true) {
+        return $authStatus;
+    }
+    $conn = connect();
+    $user_id = mysqli_real_escape_string($conn, $_REQUEST['user_id']);
+    $username = mysqli_real_escape_string($conn, $_REQUEST['username']);
+    $password = mysqli_real_escape_string($conn, $_REQUEST['password']);
+    $email_id = mysqli_real_escape_string($conn, $_REQUEST['email_id']);
+    $full_name = mysqli_real_escape_string($conn, $_REQUEST['full_name']);
+    $active_in = mysqli_real_escape_string($conn, isset($_REQUEST['active_in']) ? $_REQUEST['active_in'] : 0);
+    $access_level = mysqli_real_escape_string($conn, isset($_REQUEST['access_level']) ? $_REQUEST['access_level'] : 2);
+    $qry = "update user set username='".$username."', password='".$password."', email_id='".$email_id."',"
+        . "full_name='".$full_name."' ";
+    if($user_id!=$_SESSION['user']['user_id']) {
+        $qry .= ", active_in=".$active_in.", access_level=".$access_level." ";
+    }
+    $qry .= " where user_id=".$user_id;
+    mysqli_query($conn, $qry) or die(mysqli_error($conn));
+    return array("status"=>200,"message"=>"successfully updated");
 }
 
 function fn_productList() {
@@ -136,11 +163,11 @@ function fn_userList() {
         }
     }
 
-    $whereclause = '';
+    $whereclause = ' where access_level>0 ';
     if(!empty($_REQUEST['search']['value'])) {
-        $whereclause = " where full_name like '%" . mysqli_real_escape_string($conn, $_REQUEST['search']['value']) ."%' or ";
+        $whereclause = " and (full_name like '%" . mysqli_real_escape_string($conn, $_REQUEST['search']['value']) ."%' or ";
         $whereclause .= "email_id like '" . mysqli_real_escape_string($conn, $_REQUEST["search"]["value"]) ."%' or ";
-        $whereclause .= "username like '" . mysqli_real_escape_string($conn, $_REQUEST["search"]["value"]) ."%' ";
+        $whereclause .= "username like '" . mysqli_real_escape_string($conn, $_REQUEST["search"]["value"]) ."%') ";
     }    
     $data = [];
     $totalcount=0;
@@ -149,7 +176,7 @@ function fn_userList() {
         . mysqli_real_escape_string($conn,$_REQUEST['start']).","
         . mysqli_real_escape_string($conn,$_REQUEST['length'])
         ) or die(mysqli_error($conn));
-    $countdata = mysqli_query($conn,"select count(*) from user") or die(mysqli_error($conn));
+    $countdata = mysqli_query($conn,"select count(*) from user where access_level>0") or die(mysqli_error($conn));
     $filtercountdata = mysqli_query($conn, "select count(*) from user ".$whereclause) or die(mysqli_error($conn));
     while($countrow=mysqli_fetch_array($countdata)) {
         $totalcount = $countrow[0];
@@ -174,10 +201,10 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
         showResponse($fnName());
     }
     else {
-        showResponse(array("status"=>400,"message"=>"Required parameter missing"));
+        showResponse(array("status"=>400,"message"=>"Invalid or unknown request parameters!"));
     }
 }
 else {
-    showResponse(array("status"=>400,"message"=>"Required parameter missing"));
+    showResponse(array("status"=>400,"message"=>"Required parameter missing!"));
 }
 ?>
