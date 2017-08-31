@@ -109,7 +109,7 @@ button:hover {
     background-color: transparent !important;
 }
 
-.dialog .bd {
+.prompt .bd {
     text-align: center;
     line-height: 24px;
 }
@@ -233,6 +233,7 @@ nav>ul>li>a:hover {
 
 .datagrid td {
     word-wrap: break-word !important;
+    cursor: pointer;
 }
 
 .DataTables_sort_wrapper {

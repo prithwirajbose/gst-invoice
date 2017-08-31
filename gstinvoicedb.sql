@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
+-- version 4.5.4.1
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Aug 30, 2017 at 10:32 PM
--- Server version: 5.6.21
--- PHP Version: 5.6.3
+-- Host: localhost
+-- Generation Time: Aug 31, 2017 at 02:25 PM
+-- Server version: 5.7.11
+-- PHP Version: 5.6.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `gstinvoicedb`
@@ -26,12 +26,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `hsn`
 --
 
-CREATE TABLE IF NOT EXISTS `hsn` (
-`hsn_code_id` int(11) NOT NULL,
+CREATE TABLE `hsn` (
+  `hsn_code_id` int(11) NOT NULL,
   `hsn_code` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `hsn_code_name` text COLLATE utf8_unicode_ci NOT NULL,
   `gst_rate` double NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `hsn`
@@ -44,11 +44,48 @@ INSERT INTO `hsn` (`hsn_code_id`, `hsn_code`, `hsn_code_name`, `gst_rate`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `invoice`
+--
+
+CREATE TABLE `invoice` (
+  `invoice_id` int(11) NOT NULL,
+  `invoice_ref_no` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `update_by` int(11) NOT NULL,
+  `update_ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `sub_total` double NOT NULL,
+  `tax_total` double NOT NULL DEFAULT '0',
+  `gross_total` double NOT NULL,
+  `archive_in` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoice_item`
+--
+
+CREATE TABLE `invoice_item` (
+  `item_id` mediumint(9) NOT NULL,
+  `item_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `item_unit_price` double NOT NULL,
+  `item_unit_name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `item_qty` double NOT NULL,
+  `item_tax_rate` double NOT NULL,
+  `item_price` double NOT NULL,
+  `item_tax_total` double NOT NULL DEFAULT '0',
+  `item_total` double NOT NULL,
+  `invoice_id` mediumint(9) NOT NULL,
+  `ref_product_id` mediumint(9) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product`
 --
 
-CREATE TABLE IF NOT EXISTS `product` (
-`prod_id` mediumint(9) NOT NULL,
+CREATE TABLE `product` (
+  `prod_id` mediumint(9) NOT NULL,
   `prod_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `prod_details` text COLLATE utf8_unicode_ci,
   `unit_id` int(11) NOT NULL,
@@ -63,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   `gtin` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
   `mpn` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
   `barcode` int(40) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `product`
@@ -100,11 +137,11 @@ INSERT INTO `product` (`prod_id`, `prod_name`, `prod_details`, `unit_id`, `unit_
 -- Table structure for table `product_unit`
 --
 
-CREATE TABLE IF NOT EXISTS `product_unit` (
-`unit_id` int(11) NOT NULL,
+CREATE TABLE `product_unit` (
+  `unit_id` int(11) NOT NULL,
   `unit_name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `fraction_allowed_in` tinyint(4) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `product_unit`
@@ -120,15 +157,15 @@ INSERT INTO `product_unit` (`unit_id`, `unit_name`, `fraction_allowed_in`) VALUE
 -- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
-`user_id` int(11) NOT NULL,
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL,
   `full_name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `username` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `email_id` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `active_in` tinyint(1) NOT NULL DEFAULT '1',
   `access_level` tinyint(4) NOT NULL DEFAULT '2'
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `user`
@@ -163,25 +200,43 @@ INSERT INTO `user` (`user_id`, `full_name`, `username`, `password`, `email_id`, 
 -- Indexes for table `hsn`
 --
 ALTER TABLE `hsn`
- ADD PRIMARY KEY (`hsn_code_id`), ADD UNIQUE KEY `hsn_code` (`hsn_code`);
+  ADD PRIMARY KEY (`hsn_code_id`),
+  ADD UNIQUE KEY `hsn_code` (`hsn_code`);
+
+--
+-- Indexes for table `invoice`
+--
+ALTER TABLE `invoice`
+  ADD PRIMARY KEY (`invoice_id`);
+
+--
+-- Indexes for table `invoice_item`
+--
+ALTER TABLE `invoice_item`
+  ADD PRIMARY KEY (`item_id`),
+  ADD KEY `invoice_items_invoice_id` (`invoice_id`);
 
 --
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
- ADD PRIMARY KEY (`prod_id`), ADD KEY `prod_name` (`prod_name`,`upc`,`gtin`,`mpn`,`barcode`);
+  ADD PRIMARY KEY (`prod_id`),
+  ADD KEY `prod_name` (`prod_name`,`upc`,`gtin`,`mpn`,`barcode`),
+  ADD KEY `unit_id` (`unit_id`),
+  ADD KEY `hsn_code` (`hsn_code`);
 
 --
 -- Indexes for table `product_unit`
 --
 ALTER TABLE `product_unit`
- ADD PRIMARY KEY (`unit_id`);
+  ADD PRIMARY KEY (`unit_id`);
 
 --
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
- ADD PRIMARY KEY (`user_id`), ADD UNIQUE KEY `username` (`username`);
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -191,22 +246,42 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `hsn`
 --
 ALTER TABLE `hsn`
-MODIFY `hsn_code_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `hsn_code_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `invoice`
+--
+ALTER TABLE `invoice`
+  MODIFY `invoice_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `invoice_item`
+--
+ALTER TABLE `invoice_item`
+  MODIFY `item_id` mediumint(9) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-MODIFY `prod_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
+  MODIFY `prod_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `product_unit`
 --
 ALTER TABLE `product_unit`
-MODIFY `unit_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `unit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`unit_id`) REFERENCES `product_unit` (`unit_id`) ON UPDATE NO ACTION;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

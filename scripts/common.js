@@ -43,6 +43,28 @@ APP.redirecting = function() {
         'text-align:center;border-radius:0px 0px 5px 5px;">Please wait, Redirecting...</div>');
 };
 
+APP.openUrlInPopup = function(pageUrl, title, dimension) {
+
+    $.ajax({
+        url: APP.site + pageUrl,
+        method: 'get',
+        dataType: 'html',
+        success: function(content) {
+            $('#viewerPopup .bd').html('');
+            $('#viewerPopup').dialog({
+                draggable: true,
+                modal: true,
+                resizable: false,
+                title: title && title != null ? title : 'Details',
+                width: dimension && dimension.width ? dimension.width : 400,
+                height: dimension && dimension.height ? dimension.height : 250
+            });
+            $('#viewerPopup .bd').html(content && content != null ? content :
+                '<h1 style="color:#ddd; text-align:center;">Blank Page</h1>');
+        }
+    });
+}
+
 APP.showInfo = function(message, title) {
     $('#dialog .bd').removeClass('error');
     $('#dialog').dialog({
@@ -53,7 +75,7 @@ APP.showInfo = function(message, title) {
         width: 350
     });
     $('#dialog .bd').html(message && message != null ? message : 'Information');
-}
+};
 
 APP.showError = function(message, title) {
     $('#dialog .bd').removeClass('error');
@@ -65,4 +87,4 @@ APP.showError = function(message, title) {
         width: 350
     });
     $('#dialog .bd').html(message && message != null ? message : 'An error has occured').addClass('error');
-}
+};
