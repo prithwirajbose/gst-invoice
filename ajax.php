@@ -117,6 +117,32 @@ function fn_updateUser() {
     return array("status"=>200,"message"=>"successfully updated");
 }
 
+function fn_deleteUser() {
+    $authStatus = authCheck(1);
+    if($authStatus!==true) {
+        return $authStatus;
+    }
+
+    if(!isset($_REQUEST['users']) || empty($_REQUEST['users'])) {
+         return array("status"=>400, "message"=>"Required fields are missing");
+    }
+    
+    $conn = connect();
+    $users = $_REQUEST['users'];
+    if(strpos($users,",")!==false) {
+        $userArr = explode(",",$users);
+        for($y=0; $y<sizeof($userArr); $y++) {
+            $userArr[$y] = mysqli_real_escape_string($conn,$userArr[$y]);
+        }
+        $users = implode(",",$userArr);
+    }
+    else {
+        $users = mysqli_real_escape_string($conn,$users);
+    }
+    mysqli_query($conn, "delete from user where user_id in (".$users.")") or die(mysqli_error($conn));
+    return array("status"=>200,"message"=>"Records deleted");
+}
+
 function fn_productList() {
     $authStatus = authCheck(2);
     if($authStatus!==true) {

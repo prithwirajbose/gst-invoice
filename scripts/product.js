@@ -5,13 +5,17 @@ function renderProductListGrid(el) {
             "serverSide": true,
             "scrollY": "300px",
             "scrollCollapse": true,
+            "aaSorting": [
+                [1, 'desc']
+            ],
             "ajax": APP.site + "/ajax.php?action=productList",
             "aoColumns": [{
-                    "sTitle": "-",
+                    "sTitle": '<input type="checkbox" class="gridCheckAll_product gridCheck" style="margin-left:-5px;" ' +
+                        'onchange=\'javascript:$(".gridCheck_product").prop("checked",$(this).prop("checked"));\' />',
                     "sWidth": "8%",
                     "mDataProp": "prod_id",
                     "sType": "string",
-                    "sortable": false,
+                    "orderable": false,
                     "searchable": false,
                     "render": function(data, type, row) {
                         return '<input type="checkbox" class="gridCheck_product gridCheck" id="selectProduct_' + data + '" value="' + data + '" />';

@@ -5,13 +5,17 @@ function renderUserListGrid(el) {
             "serverSide": true,
             "scrollY": "300px",
             "scrollCollapse": true,
+            "aaSorting": [
+                [5, 'asc']
+            ],
             "ajax": APP.site + "/ajax.php?action=userList",
             "aoColumns": [{
-                "sTitle": "-",
+                "sTitle": '<input type="checkbox" class="gridCheckAll_user gridCheck" style="margin-left:-5px;" ' +
+                    'onchange=\'javascript:$(".gridCheck_user").prop("checked",$(this).prop("checked"));\' />',
                 "sWidth": "8%",
                 "mDataProp": "user_id",
                 "sType": "string",
-                "sortable": false,
+                "orderable": false,
                 "searchable": false,
                 "render": function(data, type, row) {
                     return '<input type="checkbox" class="gridCheck_user gridCheck" id="selectUser_' + data + '" value="' + data + '" />';
@@ -72,9 +76,41 @@ function renderUserListGrid(el) {
             APP.openUrlInPopup('/partialpages/addUpdateUser.php', 'Add User', { height: 350, width: 500 });
         });
 
+        $('.userGridContainer').delegate('#gridBtn_deleteUser', 'click', function(e) {
+            if ($('.gridCheck_user:checked').length > 0) {
+
+                APP.confirm("Do you really want to delete selected user(s)?", function() {
+                    var selectedIds = [];
+                    $('.gridCheck_user:checked').each(function(indx, el) {
+                        selectedIds.push($(this).val());
+                    });
+                    $.ajax({
+                        url: APP.site + '/ajax.php?action=deleteUser',
+                        data: 'users=' + selectedIds,
+                        method: 'post',
+                        success: function(resp) {
+                            if (resp.success && resp.success === true) {
+                                APP.grids.userTable.ajax.reload();
+                            } else {
+                                APP.showError("An error has occured." +
+                                    (resp.message && resp.message != '' ? '<br>' + resp.message : ''));
+                            }
+                        }
+                    });
+                });
+            } else {
+                APP.showError("Please select atleast one user!");
+            }
+        });
+
         $(el).delegate('.gridCheck_user', 'click', function(e) {
-            APP.openUrlInPopup('/partialpages/addUpdateUser.php?id=' +
-                data.user_id, 'Add User', { height: 350, width: 500 });
+            /*  if ($(this).is(':checked')) {
+                 APP.selectedUsers.push($(this).val());
+             } else {
+                 var idIndex = APP.selectedUsers.indexOf($(this).val());
+                 if (idIndex >= 0)
+                     APP.selectedUsers.splice(idIndex, 1);
+             } */
             e.stopPropagation();
         });
     }

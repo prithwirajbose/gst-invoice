@@ -80,6 +80,37 @@ APP.showInfo = function(message, title) {
     $('#dialog .bd').html(message && message != null ? message : 'Information');
 };
 
+APP.confirm = function(message, callbackFn, title) {
+    $('#dialog .bd').removeClass('error');
+    $('#dialog').dialog({
+        draggable: true,
+        modal: true,
+        resizable: false,
+        title: title && title != null ? title : 'Confirm',
+        width: 400,
+        buttons: [{
+                text: "Yes",
+                icon: "ui-icon-check",
+                click: function() {
+                    $(this).dialog("close");
+                    if (typeof(callbackFn) == 'function') {
+                        callbackFn();
+                    }
+                }
+            },
+            {
+                text: "No",
+                icon: "ui-icon-closethick",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }
+        ]
+
+    });
+    $('#dialog .bd').html(message && message != null ? message : 'Are you sure?');
+};
+
 APP.showError = function(message, title) {
     $('#dialog .bd').removeClass('error');
     $('#dialog').dialog({
@@ -107,8 +138,8 @@ APP.throwValidationError = function(el, err) {
 };
 
 APP.validateForm = function(frm) {
+    var isValidationFailed = false;
     if ($(frm).length > 0) {
-        var isValidationFailed = false;
         var allInputs = $(frm).find('input, textarea,select');
         $(allInputs).removeClass('error');
         $(allInputs).each(function(indx, el) {
@@ -141,5 +172,6 @@ APP.validationFn.required = function(val) {
 }
 
 APP.validationFn.email = function(val) {
-    return (val != null && $.trim(val) != '');
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(val);
 }
