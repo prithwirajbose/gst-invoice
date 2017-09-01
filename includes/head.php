@@ -5,6 +5,7 @@
 <script type="text/javascript">
 var APP = {};
 APP.grids = {};
+APP.validationFn = {};
 APP.site="<?php echo $config['site']; ?>";
 APP.currency="<?php echo !empty($_SESSION['currency']) ? $_SESSION['currency'] : 'INR'; ?>";
 </script>

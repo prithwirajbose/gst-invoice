@@ -34,6 +34,9 @@ function authCheck($maxAllowedLevel=0) {
 
 function fn_login() {
     $conn = connect();
+    if(empty($_REQUEST['username']) || empty($_REQUEST['password'])) {
+        return array("status"=>400, "message"=>"Username and Password is required");
+    }
     $data = mysqli_query($conn,"select * from user where username='".mysqli_real_escape_string($conn, $_REQUEST['username'])."' 
         and password='".mysqli_real_escape_string($conn,$_REQUEST['password'])."' and active_in=1 limit 1") or die(mysqli_error($conn));
     if(mysqli_num_rows($data)==1) {
@@ -58,13 +61,43 @@ function fn_logout() {
 }
 
 function fn_addUser() {
-    return array("status"=>200);
+    $authStatus = authCheck(1);
+    if($authStatus!==true) {
+        return $authStatus;
+    }
+    if(empty($_REQUEST['username']) || empty($_REQUEST['password']) || empty($_REQUEST['email_id'])
+     || empty($_REQUEST['full_name']) || empty($_REQUEST['access_level'])) {
+        return array("status"=>400, "message"=>"Required fields are missing");
+    }
+    $conn = connect();
+    $username = mysqli_real_escape_string($conn, $_REQUEST['username']);
+    $password = mysqli_real_escape_string($conn, $_REQUEST['password']);
+    $email_id = mysqli_real_escape_string($conn, $_REQUEST['email_id']);
+    $full_name = mysqli_real_escape_string($conn, $_REQUEST['full_name']);
+    $active_in = mysqli_real_escape_string($conn, isset($_REQUEST['active_in']) ? $_REQUEST['active_in'] : 0);
+    $access_level = mysqli_real_escape_string($conn, isset($_REQUEST['access_level']) ? $_REQUEST['access_level'] : 2);
+    
+    $udata = mysqli_query($conn,"select * from user where username = '" . $username ."' limit 1");
+    if(mysqli_num_rows($udata)>0) {
+        return array("status"=>400, "message"=>"Username already exists! Please use a unique one.");
+    }
+
+    $qry = "insert into user (username,password,email_id,full_name,active_in,access_level) values('"
+    .$username."','".$password."', '".$email_id."','".$full_name."','".$active_in."','"
+    .$access_level."')";
+    $res = mysqli_query($conn, $qry) or trigger_error(mysqli_error($conn));
+        
+    return array("status"=>200,"message"=>"successfully updated");
 }
 
 function fn_updateUser() {
     $authStatus = authCheck(1);
     if($authStatus!==true) {
         return $authStatus;
+    }
+    if(empty($_REQUEST['user_id']) || empty($_REQUEST['username']) || empty($_REQUEST['password']) || empty($_REQUEST['email_id'])
+     || empty($_REQUEST['full_name']) || empty($_REQUEST['access_level'])) {
+        return array("status"=>400, "message"=>"Required fields are missing");
     }
     $conn = connect();
     $user_id = mysqli_real_escape_string($conn, $_REQUEST['user_id']);
@@ -91,7 +124,7 @@ function fn_productList() {
     }
     $conn = connect();
 
-    $cols = array("prod_id","prod_name","unit_price","stock_qty","tax_rate","unit_name");
+    $cols = array("prod_id", "prod_id","prod_name","unit_price","stock_qty","tax_rate","unit_name");
     $orderclause = ' order by ';
     $comma = '';
     for($i=0;$i<sizeof($cols);$i++) {
@@ -152,7 +185,7 @@ function fn_userList() {
     }
     $conn = connect();
 
-    $cols = array("full_name","email_id","username","active_in","access_level");
+    $cols = array("user_id", "full_name","email_id","username","active_in","access_level");
     $orderclause = ' order by ';
     $comma = '';
     for($i=0;$i<sizeof($cols);$i++) {
@@ -165,14 +198,14 @@ function fn_userList() {
 
     $whereclause = ' where access_level>0 ';
     if(!empty($_REQUEST['search']['value'])) {
-        $whereclause = " and (full_name like '%" . mysqli_real_escape_string($conn, $_REQUEST['search']['value']) ."%' or ";
+        $whereclause .= " and (full_name like '%" . mysqli_real_escape_string($conn, $_REQUEST['search']['value']) ."%' or ";
         $whereclause .= "email_id like '" . mysqli_real_escape_string($conn, $_REQUEST["search"]["value"]) ."%' or ";
         $whereclause .= "username like '" . mysqli_real_escape_string($conn, $_REQUEST["search"]["value"]) ."%') ";
     }    
     $data = [];
     $totalcount=0;
     $filtercount=0;
-    $dataset = mysqli_query($conn,"select * from user " .$whereclause. " ".$orderclause." limit "
+   $dataset = mysqli_query($conn,"select * from user " .$whereclause. " ".$orderclause." limit "
         . mysqli_real_escape_string($conn,$_REQUEST['start']).","
         . mysqli_real_escape_string($conn,$_REQUEST['length'])
         ) or die(mysqli_error($conn));

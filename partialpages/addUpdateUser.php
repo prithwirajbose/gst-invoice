@@ -20,18 +20,18 @@ disconnect($conn);
 ?>
 <div><form name="addUpdateUserForm" method="post" action="<?php echo $config['site']; ?>">
 <div class="onecol"><table border="0" cellpadding="5" cellspacing="0" class="fullwidth">
-<tr><td>Full Name</td><td><input type="text" name="full_name" id="full_name" class="fullwidth" 
-    value="<?php echo !empty($user['full_name']) ? $user['full_name'] : ''; ?>"></td></tr>
-<tr><td>Email ID</td><td><input type="text" name="email_id" id="email_id" class="fullwidth" 
-    value="<?php echo !empty($user['email_id']) ? $user['email_id'] : ''; ?>"></td></tr>
-<tr><td>Username</td><td><input type="text" name="username" id="username" class="fullwidth" 
-    value="<?php echo !empty($user['username']) ? $user['username'] : ''; ?>"></td></tr>
-<tr><td>Password</td><td><input type="password" name="password" id="password" class="fullwidth" 
-    value="<?php echo !empty($user['password']) ? $user['password'] : ''; ?>"></td></tr>
+<tr><td>Full Name</td><td><input type="text" name="full_name" id="full_name" class="fullwidth required" 
+    value="<?php echo !empty($user['full_name']) ? $user['full_name'] : ''; ?>" label="Full Name"></td></tr>
+<tr><td>Email ID</td><td><input type="text" name="email_id" id="email_id" class="fullwidth required email" 
+    value="<?php echo !empty($user['email_id']) ? $user['email_id'] : ''; ?>" label="Email ID"></td></tr>
+<tr><td>Username</td><td><input type="text" name="username" id="username" class="fullwidth required" 
+    value="<?php echo !empty($user['username']) ? $user['username'] : ''; ?>" label="Username"></td></tr>
+<tr><td>Password</td><td><input type="password" name="password" id="password" class="fullwidth required" 
+    value="<?php echo !empty($user['password']) ? $user['password'] : ''; ?>" label="Password"></td></tr>
 <?php if(!isset($_REQUEST['id']) || $_SESSION['user']['user_id']!=$_REQUEST['id']) { 
     ?>
 <tr><td>Type</td><td>
-    <select name="access_level" id="access_level" class="fullwidth">
+    <select name="access_level" id="access_level" class="fullwidth required" label="Type">
         <option value="1"<?php echo !empty($user['access_level']) && $user['access_level']=="1" ? ' selected ="selected"' : ''; ?>>Admin</option>
         <option value="2"<?php echo !empty($user['access_level']) && $user['access_level']=="2" ? ' selected ="selected"' : ''; ?>>End User</option>
     </select> 

@@ -34,6 +34,7 @@ select {
     border: 1px solid #999;
     border-radius: 2px;
     padding: 2px 5px;
+    background: #fff;
 }
 
 input[type=checkbox],
@@ -43,6 +44,7 @@ input[type=radio] {
     border-radius: 2px;
     height: 18px;
     width: 18px;
+    background: #fff;
 }
 
 input[type=submit],
@@ -155,6 +157,14 @@ button:hover {
     color: red;
 }
 
+input.error,
+select.error,
+textarea.error {
+    color: red;
+    border: 1px solid red;
+    background: lightyellow;
+}
+
 nav {
     background: #333;
     padding: 2px 20px;
@@ -258,11 +268,13 @@ nav>ul>li>a:hover {
 
 .datagrid {
     table-layout: fixed !important;
+    font-size: 0.9em !important;
 }
 
 .datagrid td {
     word-wrap: break-word !important;
     cursor: pointer;
+    padding: 5px !important;
 }
 
 .DataTables_sort_wrapper {

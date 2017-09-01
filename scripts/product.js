@@ -7,13 +7,23 @@ function renderProductListGrid(el) {
             "scrollCollapse": true,
             "ajax": APP.site + "/ajax.php?action=productList",
             "aoColumns": [{
+                    "sTitle": "-",
+                    "sWidth": "8%",
+                    "mDataProp": "prod_id",
+                    "sType": "string",
+                    "sortable": false,
+                    "searchable": false,
+                    "render": function(data, type, row) {
+                        return '<input type="checkbox" class="gridCheck_product gridCheck" id="selectProduct_' + data + '" value="' + data + '" />';
+                    }
+                }, {
                     "sTitle": "ID",
                     "sWidth": "8%",
                     "mDataProp": "prod_id",
                     "sType": "string"
                 }, {
                     "sTitle": "Name",
-                    "sWidth": "34%",
+                    "sWidth": "26%",
                     "mDataProp": "prod_name",
                     "sType": "string"
                 }, {

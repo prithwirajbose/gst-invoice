@@ -91,3 +91,55 @@ APP.showError = function(message, title) {
     });
     $('#dialog .bd').html(message && message != null ? message : 'An error has occured').addClass('error');
 };
+
+APP.throwValidationError = function(el, err) {
+    var msg = {
+        "required": " is required",
+        "email": " should be a valid Email Address"
+    };
+    var errMsg = $(el).attr('label');
+    if (errMsg == null || errMsg == '') {
+        errMsg = 'Please correct the highlighted field(s)';
+    } else {
+        errMsg += ' ' + msg[err];
+    }
+    APP.showError(errMsg);
+};
+
+APP.validateForm = function(frm) {
+    if ($(frm).length > 0) {
+        var isValidationFailed = false;
+        var allInputs = $(frm).find('input, textarea,select');
+        $(allInputs).removeClass('error');
+        $(allInputs).each(function(indx, el) {
+            var elObj = $(this);
+            var clsNames = $(this)[0].className;
+            var val = $(this).val();
+            if (clsNames && clsNames != null && clsNames != '') {
+                var clsNameArr = $.trim(clsNames).split(" ");
+                if (clsNameArr != null && clsNameArr.length > 0) {
+                    for (var i = 0; i < clsNameArr.length; i++) {
+                        if (typeof(APP.validationFn[clsNameArr[i]]) == 'function') {
+                            if (!APP.validationFn[clsNameArr[i]](val)) {
+                                if (!isValidationFailed)
+                                    APP.throwValidationError(elObj, clsNameArr[i]);
+
+                                $(elObj).addClass('error');
+                                isValidationFailed = true;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    return !isValidationFailed;
+};
+
+APP.validationFn.required = function(val) {
+    return (val != null && $.trim(val) != '');
+}
+
+APP.validationFn.email = function(val) {
+    return (val != null && $.trim(val) != '');
+}

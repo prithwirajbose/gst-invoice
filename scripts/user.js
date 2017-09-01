@@ -8,7 +8,7 @@ function renderUserListGrid(el) {
             "ajax": APP.site + "/ajax.php?action=userList",
             "aoColumns": [{
                 "sTitle": "-",
-                "sWidth": "6%",
+                "sWidth": "8%",
                 "mDataProp": "user_id",
                 "sType": "string",
                 "sortable": false,
@@ -82,9 +82,12 @@ function renderUserListGrid(el) {
 
 function addUpdateUser(e) {
     var formObj = $('form[name=addUpdateUserForm]');
+    if (!APP.validateForm($(formObj))) {
+        return false;
+    }
     if (formObj.length > 0) {
         var reqUrl = APP.site + '/ajax.php?action=addUser';
-        if ($(formObj).find('user_id').val() != '') {
+        if ($(formObj).find('#user_id').val() != '') {
             reqUrl = APP.site + '/ajax.php?action=updateUser';
         }
         $.ajax({

@@ -4,6 +4,7 @@ if(!isset($_SESSION)) {
 }
 include_once('includes/membervalidation.php');
 include_once('config.php');
+$isAdmin = $_SESSION['user']['access_level']<=1;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,12 +19,14 @@ include_once('config.php');
         <div class="main">
             <?php include('includes/pageheading.php'); ?>
             <div class="content">
+            <?php if($isAdmin) { ?>
                 <div class="twocol widgetbox userGridContainer">
                     <h1 class="sectionheading">Users</h1>
                     <table id="userGrid" class="display datagrid" cellspacing="0" style="width:100%">
                     </table>
                 </div>
-                <div class="twocol widgetbox productGridContainer">
+            <?php } ?>
+                <div class="<?php echo $isAdmin ? 'twocol' : 'onecol'; ?> widgetbox productGridContainer">
                     <h1 class="sectionheading">Products</h1>
                     <table id="productGrid" class="display datagrid" cellspacing="0" style="width:100%">
                     </table>

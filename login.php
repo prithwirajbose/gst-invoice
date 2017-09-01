@@ -11,8 +11,8 @@
         <p style="margin:-10px -10px 10px -10px; padding:3px; background:#666; color:#fff; border-radius:5px 5px 0px 0px;">Login</p>
             <form name="loginform" method="post" action="login.php">
             <table border="0" cellpadding="5" cellspacing="0">
-                <tr><td>Username</td><td><input type="text" name="username" id="username" /></td></tr>
-                <tr><td>Password</td><td><input type="password" name="password" id="password" /></td></tr>
+                <tr><td>Username</td><td><input type="text" name="username" id="username" class="required" label="Username" /></td></tr>
+                <tr><td>Password</td><td><input type="password" name="password" id="password" class="required" label="Password" /></td></tr>
                 <tr><td>&nbsp;</td><td style="text-align:right">
                 <input type="hidden" name="redir" 
                 value="<?php echo !empty($_REQUEST['redir']) ? urlencode( $_REQUEST['redir'] ) : ""; ?>">
@@ -25,8 +25,7 @@
     </div>
     <script type="text/javascript">
     var doLogin = function() {
-       if($.trim($('#username').val())=='' || $.trim($('#password').val())=='') {
-           APP.showInfo("Please enter username and password.");
+       if(!APP.validateForm($('form[name=loginform]'))) {
            return false;
        }
         $.ajax({
