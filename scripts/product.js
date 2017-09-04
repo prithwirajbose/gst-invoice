@@ -63,8 +63,58 @@ function renderProductListGrid(el) {
                     "mDataProp": "unit_name",
                     "sType": "string"
                 }
-            ]
+            ],
+            "initComplete": function(table, resp) {
+                $(table.nTableWrapper).find('.dataTables_length').append('<span style="margin-left:20px;">' +
+                    '<button type="button" id="gridBtn_addProduct" class="smallbtn">' +
+                    '<i class="material-icons">note_add</i> Add</button>' +
+                    '<button type="button" id="gridBtn_deleteProduct" class="smallbtn">' +
+                    '<i class="material-icons">delete_forever</i> Delete</button></span>');
+            }
         });
+
         APP.grids.productTable = productTable;
+
+        $(el).delegate('tr', 'click', function(e) {
+
+            var data = productTable.row(this).data();
+            APP.openUrlInPopup('/partialpages/addUpdateProduct.php?id=' +
+                data.prod_id, 'Edit Product', { height: 450, width: 800 });
+        });
+
+        $('.productGridContainer').delegate('#gridBtn_addProduct', 'click', function(e) {
+            APP.openUrlInPopup('/partialpages/addUpdateProduct.php', 'Add Product', { height: 450, width: 700 });
+        });
+
+        $('.productGridContainer').delegate('#gridBtn_deleteProduct', 'click', function(e) {
+            if ($('.gridCheck_product:checked').length > 0) {
+
+                APP.confirm("Do you really want to delete selected products(s)?", function() {
+                    var selectedIds = [];
+                    $('.gridCheck_product:checked').each(function(indx, el) {
+                        selectedIds.push($(this).val());
+                    });
+                    $.ajax({
+                        url: APP.site + '/ajax.php?action=deleteProduct',
+                        data: 'products=' + selectedIds,
+                        method: 'post',
+                        success: function(resp) {
+                            if (resp.success && resp.success === true) {
+                                APP.grids.productTable.ajax.reload();
+                            } else {
+                                APP.showError("An error has occured." +
+                                    (resp.message && resp.message != '' ? '<br>' + resp.message : ''));
+                            }
+                        }
+                    });
+                });
+            } else {
+                APP.showError("Please select atleast one product!");
+            }
+        });
+
+        $(el).delegate('.gridCheck_product', 'click', function(e) {
+            e.stopPropagation();
+        });
     }
 }

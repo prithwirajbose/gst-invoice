@@ -14,6 +14,8 @@ APP.currency="<?php echo !empty($_SESSION['currency']) ? $_SESSION['currency'] :
 <script src="<?php echo $config['site']; ?>/scripts/jquery.ui/jquery-ui.min.js" type="text/javascript"></script>
 <script src="<?php echo $config['site']; ?>/scripts/jquery.datatables/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="<?php echo $config['site']; ?>/scripts/jquery.datatables/js/dataTables.jqueryui.min.js" type="text/javascript"></script>
+<script src="<?php echo $config['site']; ?>/scripts/editor/simplemde.min.js"></script>
+<script src="<?php echo $config['site']; ?>/scripts/lodash.js"></script>
 <script type="text/javascript" src="<?php echo $config['site']; ?>/scripts/common.js"></script>
 
 <link href="font-style.css" rel="stylesheet">
@@ -23,4 +25,5 @@ APP.currency="<?php echo !empty($_SESSION['currency']) ? $_SESSION['currency'] :
 <link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.datatables/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.datatables/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/jquery.datatables/css/dataTables.jqueryui.min.css">
+<link rel="stylesheet" href="<?php echo $config['site']; ?>/scripts/editor/simplemde.min.css">
 <link href="<?php echo $config['site']; ?>/style.css" rel="stylesheet">

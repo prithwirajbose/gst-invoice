@@ -60,6 +60,94 @@ function fn_logout() {
     return array("status"=>200);
 }
 
+function fn_addProduct() {
+    die();
+    $authStatus = authCheck(1);
+    if($authStatus!==true) {
+        return $authStatus;
+    }
+    if(empty($_REQUEST['username']) || empty($_REQUEST['password']) || empty($_REQUEST['email_id'])
+     || empty($_REQUEST['full_name']) || empty($_REQUEST['access_level'])) {
+        return array("status"=>400, "message"=>"Required fields are missing");
+    }
+    $conn = connect();
+    $username = mysqli_real_escape_string($conn, $_REQUEST['username']);
+    $password = mysqli_real_escape_string($conn, $_REQUEST['password']);
+    $email_id = mysqli_real_escape_string($conn, $_REQUEST['email_id']);
+    $full_name = mysqli_real_escape_string($conn, $_REQUEST['full_name']);
+    $active_in = mysqli_real_escape_string($conn, isset($_REQUEST['active_in']) ? $_REQUEST['active_in'] : 0);
+    $access_level = mysqli_real_escape_string($conn, isset($_REQUEST['access_level']) ? $_REQUEST['access_level'] : 2);
+    
+    $udata = mysqli_query($conn,"select * from user where username = '" . $username ."' limit 1");
+    if(mysqli_num_rows($udata)>0) {
+        return array("status"=>400, "message"=>"Username already exists! Please use a unique one.");
+    }
+
+    $qry = "insert into user (username,password,email_id,full_name,active_in,access_level) values('"
+    .$username."','".$password."', '".$email_id."','".$full_name."','".$active_in."','"
+    .$access_level."')";
+    $res = mysqli_query($conn, $qry) or trigger_error(mysqli_error($conn));
+    disconnect($conn);
+        
+    return array("status"=>200,"message"=>"successfully updated");
+}
+
+function fn_updateProduct() {
+    $authStatus = authCheck(1);
+    if($authStatus!==true) {
+        return $authStatus;
+    }
+    if(empty($_REQUEST['prod_id']) || empty($_REQUEST['username']) || empty($_REQUEST['password']) || empty($_REQUEST['email_id'])
+     || empty($_REQUEST['full_name']) || empty($_REQUEST['access_level'])) {
+        return array("status"=>400, "message"=>"Required fields are missing");
+    }
+    $conn = connect();
+    $user_id = mysqli_real_escape_string($conn, $_REQUEST['user_id']);
+    $username = mysqli_real_escape_string($conn, $_REQUEST['username']);
+    $password = mysqli_real_escape_string($conn, $_REQUEST['password']);
+    $email_id = mysqli_real_escape_string($conn, $_REQUEST['email_id']);
+    $full_name = mysqli_real_escape_string($conn, $_REQUEST['full_name']);
+    $active_in = mysqli_real_escape_string($conn, isset($_REQUEST['active_in']) ? $_REQUEST['active_in'] : 0);
+    $access_level = mysqli_real_escape_string($conn, isset($_REQUEST['access_level']) ? $_REQUEST['access_level'] : 2);
+    $qry = "update user set username='".$username."', password='".$password."', email_id='".$email_id."',"
+        . "full_name='".$full_name."' ";
+    if($user_id!=$_SESSION['user']['user_id']) {
+        $qry .= ", active_in=".$active_in.", access_level=".$access_level." ";
+    }
+    $qry .= " where user_id=".$user_id;
+    mysqli_query($conn, $qry) or die(mysqli_error($conn));
+    disconnect($conn);
+    return array("status"=>200,"message"=>"successfully updated");
+}
+
+function fn_deleteProduct() {
+    die();
+    $authStatus = authCheck(1);
+    if($authStatus!==true) {
+        return $authStatus;
+    }
+
+    if(!isset($_REQUEST['users']) || empty($_REQUEST['users'])) {
+         return array("status"=>400, "message"=>"Required fields are missing");
+    }
+    
+    $conn = connect();
+    $users = $_REQUEST['users'];
+    if(strpos($users,",")!==false) {
+        $userArr = explode(",",$users);
+        for($y=0; $y<sizeof($userArr); $y++) {
+            $userArr[$y] = mysqli_real_escape_string($conn,$userArr[$y]);
+        }
+        $users = implode(",",$userArr);
+    }
+    else {
+        $users = mysqli_real_escape_string($conn,$users);
+    }
+    mysqli_query($conn, "delete from user where user_id in (".$users.")") or die(mysqli_error($conn));
+    disconnect($conn);
+    return array("status"=>200,"message"=>"Records deleted");
+}
+
 function fn_addUser() {
     $authStatus = authCheck(1);
     if($authStatus!==true) {
@@ -86,6 +174,7 @@ function fn_addUser() {
     .$username."','".$password."', '".$email_id."','".$full_name."','".$active_in."','"
     .$access_level."')";
     $res = mysqli_query($conn, $qry) or trigger_error(mysqli_error($conn));
+    disconnect($conn);
         
     return array("status"=>200,"message"=>"successfully updated");
 }
@@ -114,6 +203,7 @@ function fn_updateUser() {
     }
     $qry .= " where user_id=".$user_id;
     mysqli_query($conn, $qry) or die(mysqli_error($conn));
+    disconnect($conn);
     return array("status"=>200,"message"=>"successfully updated");
 }
 
@@ -140,7 +230,58 @@ function fn_deleteUser() {
         $users = mysqli_real_escape_string($conn,$users);
     }
     mysqli_query($conn, "delete from user where user_id in (".$users.")") or die(mysqli_error($conn));
+    disconnect($conn);
     return array("status"=>200,"message"=>"Records deleted");
+}
+
+function fn_unitSearch() {
+    if(!isset($_REQUEST['term']) || empty($_REQUEST['term'])) {
+        return array("status"=>400,"message"=>"Search term is missing");
+    }
+    $authStatus = authCheck(2);
+    if($authStatus!==true) {
+        return $authStatus;
+    }
+    $conn = connect();
+    $term = strtolower(mysqli_real_escape_string($conn, $_REQUEST['term']));
+    $data = mysqli_query($conn,"select unit_name as value, unit_name as label, unit_id as id ".
+        " from product_unit where lower(unit_name) like '".$term."%' order by unit_name asc");
+    $res = array();
+    if(mysqli_num_rows($data)>0) {
+        while($row = mysqli_fetch_assoc($data)) {
+            array_push($res,$row);
+        }
+    }
+    return array("status"=>200, "data"=>$res);
+    disconnect($conn);
+}
+
+function fn_createUnit() {
+    if(!isset($_REQUEST['unit_name']) || empty($_REQUEST['unit_name'])) {
+        return array("status"=>400,"message"=>"Unit Name is missing");
+    }
+    $authStatus = authCheck(2);
+    if($authStatus!==true) {
+        return $authStatus;
+    }
+    $conn = connect();
+    $unit_name = mysqli_real_escape_string($conn, $_REQUEST['unit_name']);
+    $fraction_allowed = mysqli_real_escape_string($conn, isset($_REQUEST['fraction_allowed']) ? $_REQUEST['fraction_allowed'] : 1);
+    $data = mysqli_query($conn,"select unit_id as id ".
+        " from product_unit where lower(unit_name) = '".strtolower($unit_name)."' limit 1");
+    $id = 0;
+    if(mysqli_num_rows($data)>0) {
+        while($row = mysqli_fetch_assoc($data)) {
+            $id = $row['id'];
+        }
+    }
+    else {
+        mysqli_query($conn,"insert into product_unit (unit_name, fraction_allowed_in) values ('" .
+            $unit_name . "', '" . $fraction_allowed ."')");
+        $id = mysqli_insert_id($conn);
+    }
+    return array("status"=>200, "data"=>array("unit_id"=>$id));
+    disconnect($conn);
 }
 
 function fn_productList() {
